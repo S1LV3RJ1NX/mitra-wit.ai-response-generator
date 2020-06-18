@@ -61,6 +61,11 @@ def helpline(api_response=None):
 				if 'Depression' in value[0]:
 					string += "\n\t"+str(ct)+")Name: "+value[0].title()+"\n\t  Phone: "+str(value[1])
 					ct+=1
+		else:
+			for value in emergency["emergency"]:
+				string += "\n\t"+str(ct)+")Name: "+value[0].title()+"\n\t  Phone: "+str(value[1])
+				ct+=1
+
 	else:
 		for value in emergency["emergency"]:
 			string += "\n\t"+str(ct)+")Name: "+value[0].title()+"\n\t  Phone: "+str(value[1])
@@ -205,7 +210,7 @@ def intents_to_functions(intent):
 
 def generate_response(message):
 	api_response = client.message(message)
-	# print(api_response)
+	print(api_response)
 	intent = api_response['intents'][0]['name']
 
 	response = intents_to_functions(intent)(api_response)
@@ -216,7 +221,7 @@ def generate_response(message):
 
 if __name__ == '__main__':
 	
-	message = "good bye"
+	message = "I am in emergency"
 
 	response = generate_response(message)
 	# print()
