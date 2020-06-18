@@ -1,6 +1,7 @@
 from wit import Wit
 import config as cfg
 import excel_parser as ep
+from covid_api import response_giver
 
 # WIT API
 access_token = cfg.wit_tokens["server_access_token"]
@@ -104,6 +105,8 @@ def get_ngo_location(api_response=None):
 						"\n\t  Email: "+str(value[2]).strip()+"\n\t  Addr: "+str(value[3]).strip().title()+ \
 						"\n\t  Type: "+value[5].title()
 			ct+=1
+		else:
+			string += out_of_scope()
 
 	else:
 		string += out_of_scope()
@@ -128,6 +131,8 @@ def get_food_shelter_location(api_response=None):
 
 			string += "\n\t"+str(ct)+")Addr: "+value[0].strip().title()+"\n\t  Phone: "+str(value[1]).strip()
 			ct+=1
+		else:
+			string += out_of_scope()
 
 	else:
 		string += out_of_scope()
@@ -160,6 +165,8 @@ def get_hospital_location(api_response=None):
 			# print(type(value[0]), type(value[1]), type(value[2]), type(value[3]), type(value[5]) )
 			string += "\n\t"+str(ct)+")Name: "+value[0].strip().title()+"\n\t  Phone: "+str(value[1]).strip()
 			ct+=1
+		else:
+			string += out_of_scope()
 
 	else:
 		string += out_of_scope()
@@ -183,6 +190,8 @@ def get_ambulance_location(api_response):
 			# print(type(value[0]), type(value[1]), type(value[2]), type(value[3]), type(value[5]) )
 			string += "\n\t"+str(ct)+")Name: "+value[1].strip().title()+"\n\t  Phone: "+str(value[2]).strip()
 			ct+=1
+		else:
+			string += out_of_scope()
 
 	else:
 		string += out_of_scope()
@@ -191,6 +200,18 @@ def get_ambulance_location(api_response):
 
 def thanks(api_response=None):
 	return "I am glad to be your 'Mitra'. Do remember me, in times of crisis..!!"
+
+def get_statistics(api_response=None):
+	entities_state = None
+	entities_city = None
+
+	if 'ent_state:ent_state' in api_response['entities']:
+		entities_state = api_response['entities']['ent_state:ent_state'][0]['value']
+	if 'ent_city:ent_city' in api_response['entities']:
+		entities_city = api_response['entities']['ent_city:ent_city'][0]['value']
+
+	string = response_giver(entities_city, entities_state)
+	return string
 
 def intents_to_functions(intent): 
 	# print("Intent:",intent)
@@ -204,24 +225,29 @@ def intents_to_functions(intent):
 		'wit_yoga': yoga_recommend, 
 		'wit_hospital': get_hospital_location,
 		'wit_ambulance': get_ambulance_location,
-		'wit_thanks' : thanks
+		'wit_thanks' : thanks,
+		'wit_ask_stats':get_statistics
 	}.get(intent, "Invalid query, please reformat the query and try again!!")
 
 
 def generate_response(message):
 	api_response = client.message(message)
-	print(api_response)
-	intent = api_response['intents'][0]['name']
+	response = None
+	# print(api_response)
+	try:
+		intent = api_response['intents'][0]['name']
 
-	response = intents_to_functions(intent)(api_response)
+		response = intents_to_functions(intent)(api_response)
 
-	# print(response)
+		# print(response)
+	except:
+		response = "Invalid qurery please ask again!!"
 
 	return response
 
 if __name__ == '__main__':
 	
-	message = "I am in emergency"
+	message = "Corona virus cases in ahmedabad Gujrat"
 
 	response = generate_response(message)
 	# print()
