@@ -210,7 +210,46 @@ def get_statistics(api_response=None):
 	if 'ent_city:ent_city' in api_response['entities']:
 		entities_city = api_response['entities']['ent_city:ent_city'][0]['value']
 
+	# print(entities_city, entities_state)
 	string = response_giver(entities_city, entities_state)
+	return string
+
+def corona_precaution(api_response=None):
+	string = (
+		"To prevent the spread of COVID-19:"
+		"\n 1)Clean your hands often. Use soap and water, or an alcohol-based hand rub."
+		"\n 2)Maintain a safe distance from anyone who is coughing or sneezing."
+		"\n 3)Don’t touch your eyes, nose or mouth."
+		"\n 4)Cover your nose and mouth with your bent elbow or a tissue when you cough or sneeze."
+		"\n 5)Stay home if you feel unwell."
+		"\n 6)If you have a fever, cough and difficulty breathing, seek medical attention. Call in advance."
+		"\n 7)Follow the directions of your local health authority."
+	)
+	return string
+
+def corona_symptoms(api_response):
+	string = (
+		"Most common symptoms:"
+		"\n\t -fever"
+		"\n\t -dry cough"
+		"\n\t -tiredness"
+		"\n\nLess common symptoms:"
+		"\n\t -aches and pains"
+		"\n\t -sore throat"
+		"\n\t -diarrhoea"
+		"\n\t -conjunctivitis"
+		"\n\t -headache"
+		"\n\t -loss of taste or smell"
+		"\n\t -a rash on skin, or discolouration of fingers or toes"
+		"\n\nSerious symptoms:"
+		"\n\t -difficulty breathing or shortness of breath"
+		"\n\t -chest pain or pressure"
+		"\n\t -loss of speech or movement"
+
+		"\n\nSeek immediate medical attention if you have serious symptoms. Always call before visiting your doctor or health facility."
+		"\nPeople with mild symptoms who are otherwise healthy should manage their symptoms at home."
+		"\nOn average it takes 5–6 days from when someone is infected with the virus for symptoms to show, however it can take up to 14 days"
+	)
 	return string
 
 def intents_to_functions(intent): 
@@ -226,7 +265,9 @@ def intents_to_functions(intent):
 		'wit_hospital': get_hospital_location,
 		'wit_ambulance': get_ambulance_location,
 		'wit_thanks' : thanks,
-		'wit_ask_stats':get_statistics
+		'wit_ask_stats':get_statistics,
+		'wit_corona_precautions' : corona_precaution,
+		'wit_corona_symptom': corona_symptoms
 	}.get(intent, "Invalid query, please reformat the query and try again!!")
 
 
@@ -236,18 +277,17 @@ def generate_response(message):
 	# print(api_response)
 	try:
 		intent = api_response['intents'][0]['name']
-
+		# print(intent)
 		response = intents_to_functions(intent)(api_response)
-
 		# print(response)
-	except:
-		response = "Invalid qurery please ask again!!"
+	except KeyError:
+		response = "Invalid query please ask again!!"
 
 	return response
 
 if __name__ == '__main__':
 	
-	message = "Corona virus cases in ahmedabad Gujrat"
+	message = "How do I know if I got corona?"
 
 	response = generate_response(message)
 	# print()

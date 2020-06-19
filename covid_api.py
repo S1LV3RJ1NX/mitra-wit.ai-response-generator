@@ -9,10 +9,10 @@ def district_counts(main_df, district):
 	try:
 		x = main_df.iloc[0]['MH'][district.title()]
 		confirmed = x['total']['confirmed']
-		deceased = x['total']['deceased']
+		# deceased = x['total']['deceased']
 		recovered = x['total']['recovered']
 
-		response = "Confirmed Cases for "+district.title()+" are: " + str(confirmed) + ",\nDeceased Cases: " + str(deceased) + ",\nRecovered Cases: " + str(recovered)
+		response = "* Confirmed Cases for "+district.title()+" are: "+str(confirmed)+",\n  Recovered Cases: " + str(recovered)
 		# print(response)
 	except:
 		response = "\nOnly districts from Maharashtra State allowed"
@@ -22,27 +22,43 @@ def state_counts(main_df, state_code):
 	response = ""
 	try:
 		if len(state_code) == 2:
-			x = dict(main_df.iloc[1][state_code])
+			# print(state_code)
+			x = main_df.iloc[1][state_code]
+			# print(x)
 			confirmed = x['confirmed']
-			deceased = x['deceased']
+			# deceased = x['deceased']
 			recovered = x['recovered']
-			tested = x['tested']
-			response = "Confirmed Cases for " + state_code + " are: " + str(confirmed) + ",\nDeceased Cases: " + str(deceased) + ",\nRecovered Cases: " + str(recovered) + ",\nTested Cases: " + str(tested)
+			# tested = x['tested']
+			response = "* Confirmed Cases for " + state_code + " are: " \
+			+ str(confirmed) + ",\n  Recovered Cases: " + str(recovered) 
 		else:
 			if state_code.title() in state_codes:
 				sc = state_codes[state_code.title()]
 				x = dict(main_df.iloc[1][sc])
 				confirmed = x['confirmed']
-				deceased = x['deceased']
+				# deceased = x['deceased']
 				recovered = x['recovered']
-				tested = x['tested']
-				response = "Confirmed Cases for " +state_code.title()+" are: " + str(confirmed) + ",\nDeceased Cases: " + str(deceased) + ",\nRecovered Cases: " + str(recovered) + ",\nTested Cases: " + str(tested)
+				# tested = x['tested']
+				response = "* Confirmed Cases for " +state_code.title()+" are: " + str(confirmed) + \
+				",\n  Recovered Cases: " + str(recovered)
 
 			else:
-				response = "\nInvalid state!!"
+				response = "\nSorry we could not find the stats in our database!!"
 	except:
-		response = "\nInvalid state!!"
+		response = "\nSorry we could not find the stats in our database!!"
 	return response
+
+def india_count(df):
+	x = df.iloc[1]['TT']
+	# print(x)
+	confirmed = x['confirmed']
+	# deceased = x['deceased']
+	recovered = x['recovered']
+	# tested = x['tested']
+	response = "* Confirmed Cases for India are "+ str(confirmed) + \
+	",\n  Recovered Cases: " + str(recovered)
+	return response
+
 
 def response_giver(district = None, state_code = None):
 
@@ -55,13 +71,20 @@ def response_giver(district = None, state_code = None):
 
 	resp = None
 	if district == None and state_code == None:
-		resp = state_counts(main_df, 'TT')
+		resp = india_count(main_df)
 	elif district == None:
 		resp = state_counts(main_df, state_code)
+		resp += "\n\n"+india_count(main_df)
 	elif state_code == None:
 		resp = district_counts(main_df, district)
+		resp += "\n\n"+india_count(main_df)
 	else:
-		print("Here")
 		resp = district_counts(main_df, district)
+		# print(resp)
+		resp += "\n\n"+state_counts(main_df, state_code)
+		# print(resp)
+		resp += "\n\n"+india_count(main_df)
+		# print(resp)
+
 	return resp
 		
