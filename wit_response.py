@@ -282,14 +282,14 @@ def generate_response(message):
 		# print(intent)
 		response = intents_to_functions(intent)(api_response)
 		# print(response)
-	except KeyError:
+	except:
 		response = "Invalid query please ask again!!"
 
 	return response
 
 if __name__ == '__main__':
 	
-	message = "How do I know if I got corona?"
+	message = "wassup?"
 
 	response = generate_response(message)
 	# print()
