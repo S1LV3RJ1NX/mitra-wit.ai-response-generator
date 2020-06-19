@@ -19,15 +19,17 @@ emergency = ep.read_excel_generate_mapping(cfg.excel_path["emergency"], to_map=F
 def greet(api_response=None):
 
 	string = (
-		"Hii, I am 'Mitra' your guardian and helper during these tough times!!\n"
+		"Hii, I am 'Mitra' your guardian and helper during these tough times!! "
 		"I can help you with following problems:\n"
-		"\t - Find emergency helpline numbers\n"
-		"\t - Find you NGOs where you can donate or ask for help in your city\n"
+		"\t - Find emergency helpline numbers.\n"
+		"\t - Ask for COVID symptoms and precautions.\n"
+		"\t - Ask for COVID stats for states the of India and cities of Maharashtra.\n"
+		"\t - Find you NGOs where you can donate or ask for help in your city.\n"
 		"\t - Find you food shelters and night shelters for cheap stay and free food organized by gov in your city.\n"
 		"\t - Find prominent hospitals and ambulance services in your city.\n"
-		"\t - Help you relax by recommending our curated'YOGA' exercises to freshen you!!\n"
-		"\t - Refresh your mind by our curated and soothing musical playlist\n\n"
-		"Please not the NGO/Shelters/Ambulance/Hospital facilities are currently limited to followin cities Sangli, Kolhapur, Satara, Solapur and Pune.\n"
+		"\t - Help you relax by recommending our curated 'YOGA' exercises!!\n"
+		"\t - Refresh your mind from our curated and soothing musical playlist!!\n\n"
+		"Please note the NGO/Shelters/Ambulance/Hospital facilities are currently limited to following cities:\n\tSangli, Kolhapur, Satara, Solapur and Pune.\n"
 		"It is necessary to provide your city name while searching for them so that we can serve you better!!!"
 	)
 	return string
