@@ -37,8 +37,8 @@ def greet(api_response=None):
 def out_of_scope(api_response=None):
 	string = (
 		"Sorry to say, we are unable to solve your query.\n"
-		"It might be the case, you might have missed out city names where required\n"
-		"Like searching for NGO / food-shelter / hospital location. Help us serve you better!!\n"
+		"It might be the case, you might have missed out city names or miss-spelled them where required,"
+		"like searching for NGO / food-shelter / hospital location. Help us serve you better!!\n"
 		"Use one of the city names from sangli, kolhapur, satara, pune and solapur for location specific queries.\n"
 		)
 	
@@ -93,20 +93,23 @@ def get_ngo_location(api_response=None):
 
 	if bool(enty):
 		ct = 1 
-		city = enty['ent_city:ent_city'][0]['value']
+		city = str(enty['ent_city:ent_city'][0]['value'])
+
+		city = city.lower()
 
 		if "kop" in city:
 			city = "kolhapur"
 
-		string += "Here are your required NGOs in the city "+city+": "
-		# print(ngo[city.lower()])
-		for value in ngo[city.lower()]:
-			# print(type(value[0]), type(value[1]), type(value[2]), type(value[3]), type(value[5]) )
+		if city in ngo:
+			string += "Here are your required NGOs in the city "+city+": "
+		
+			for value in ngo[city]:
+				# print(type(value[0]), type(value[1]), type(value[2]), type(value[3]), type(value[5]) )
 
-			string += "\n\t"+str(ct)+")Name: "+value[0].strip().title()+"\n\t  Phone: "+str(value[1]).strip()+ \
-						"\n\t  Email: "+str(value[2]).strip()+"\n\t  Addr: "+str(value[3]).strip().title()+ \
-						"\n\t  Type: "+value[5].title()
-			ct+=1
+				string += "\n\t"+str(ct)+")Name: "+str(value[0]).strip().title()+"\n\t  Phone: "+str(value[1]).strip()+ \
+							"\n\t  Email: "+str(value[2]).strip()+"\n\t  Addr: "+str(value[3]).strip().title()+ \
+							"\n\t  Type: "+str(value[5]).title()
+				ct+=1
 		else:
 			string += out_of_scope()
 
@@ -121,18 +124,19 @@ def get_food_shelter_location(api_response=None):
 
 	if bool(enty):
 		ct = 1 
-		city = enty['ent_city:ent_city'][0]['value']
+		city = str(enty['ent_city:ent_city'][0]['value'])
+		city = city.lower()
 
 		if "kop" in city:
 			city = "kolhapur"
 
-		string += "Here are your required food/night shelters in the city "+city+": "
-		# print(ngo[city.lower()])
-		for value in food[city.lower()]:
-			# print(type(value[0]), type(value[1]), type(value[2]), type(value[3]), type(value[5]) )
-
-			string += "\n\t"+str(ct)+")Addr: "+value[0].strip().title()+"\n\t  Phone: "+str(value[1]).strip()
-			ct+=1
+		if city in food:
+			string += "Here are your required food/night shelters in the city "+city+": "
+			# print(ngo[city.lower()])
+			for value in food[city]:
+				# print(type(value[0]), type(value[1]), type(value[2]), type(value[3]), type(value[5]) )
+				string += "\n\t"+str(ct)+")Addr: "+str(value[0]).strip().title()+"\n\t  Phone: "+str(value[1]).strip()
+				ct+=1
 		else:
 			string += out_of_scope()
 
@@ -156,17 +160,19 @@ def get_hospital_location(api_response=None):
 
 	if bool(enty):
 		ct = 1 
-		city = enty['ent_city:ent_city'][0]['value']
+		city = str(enty['ent_city:ent_city'][0]['value'])
+		city = city.lower()
 
 		if "kop" in city:
 			city = "kolhapur"
 
-		string += "Here are your required hospitals in the city "+city+": "
-		# print(ngo[city.lower()])
-		for value in hospital[city.lower()]:
-			# print(type(value[0]), type(value[1]), type(value[2]), type(value[3]), type(value[5]) )
-			string += "\n\t"+str(ct)+")Name: "+value[0].strip().title()+"\n\t  Phone: "+str(value[1]).strip()
-			ct+=1
+		if city in hospital:
+			string += "Here are your required hospitals in the city "+city+": "
+			# print(ngo[city.lower()])
+			for value in hospital[city.lower()]:
+				# print(type(value[0]), type(value[1]), type(value[2]), type(value[3]), type(value[5]) )
+				string += "\n\t"+str(ct)+")Name: "+str(value[0]).strip().title()+"\n\t  Phone: "+str(value[1]).strip()
+				ct+=1
 		else:
 			string += out_of_scope()
 
@@ -181,17 +187,20 @@ def get_ambulance_location(api_response):
 
 	if bool(enty):
 		ct = 1 
-		city = enty['ent_city:ent_city'][0]['value']
+		city = str(enty['ent_city:ent_city'][0]['value'])
 
+		city = city.lower()
+		
 		if "kop" in city:
 			city = "kolhapur"
 
-		string += "Here are your required ambulance in the city "+city+": "
-		# print(ngo[city.lower()])
-		for value in ambulance[city.lower()]:
-			# print(type(value[0]), type(value[1]), type(value[2]), type(value[3]), type(value[5]) )
-			string += "\n\t"+str(ct)+")Name: "+value[1].strip().title()+"\n\t  Phone: "+str(value[2]).strip()
-			ct+=1
+		if city in ambulance:
+			string += "Here are your required ambulance in the city "+city+": "
+			# print(ngo[city.lower()])
+			for value in ambulance[city.lower()]:
+				# print(type(value[0]), type(value[1]), type(value[2]), type(value[3]), type(value[5]) )
+				string += "\n\t"+str(ct)+")Name: "+str(value[1]).strip().title()+"\n\t  Phone: "+str(value[2]).strip()
+				ct+=1
 		else:
 			string += out_of_scope()
 
@@ -289,7 +298,7 @@ def generate_response(message):
 
 if __name__ == '__main__':
 	
-	message = "wassup?"
+	message = "Ngo in sungali"
 
 	response = generate_response(message)
 	# print()
