@@ -16,6 +16,7 @@ yoga = ep.read_excel_generate_mapping(cfg.excel_path["yoga"], to_map=False, key=
 music = ep.read_excel_generate_mapping(cfg.excel_path["music"], to_map=False, key="music")
 emergency = ep.read_excel_generate_mapping(cfg.excel_path["emergency"], to_map=False, key="emergency")
 
+# Intent greet
 def greet(api_response=None):
 
 	string = (
@@ -34,6 +35,7 @@ def greet(api_response=None):
 	)
 	return string
 
+# Intent out of scope
 def out_of_scope(api_response=None):
 	string = (
 		"Sorry to say, we are unable to solve your query.\n"
@@ -44,6 +46,7 @@ def out_of_scope(api_response=None):
 	
 	return string
 
+# intent helpine
 def helpline(api_response=None):
 
 	category = api_response['entities']
@@ -141,7 +144,7 @@ def get_food_shelter_location(api_response=None):
 			# print(ngo[city.lower()])
 			for value in food[city]:
 				# print(type(value[0]), type(value[1]), type(value[2]), type(value[3]), type(value[5]) )
-				string += "\n\t"+str(ct)+")Addr: "+str(value[0]).strip().title()+"\n\t  Phone: "+str(value[1]).strip()
+				string += "\n\t"+str(ct)+")Addr: "+str(value[1]).strip().title()+"\n\t  Phone: "+str(value[2]).strip()
 				ct+=1
 		else:
 			string += out_of_scope()
@@ -304,7 +307,7 @@ def generate_response(message):
 
 if __name__ == '__main__':
 	
-	message = "you were of great help... thanks"
+	message = "food shelters in Sangli"
 
 	response = generate_response(message)
 	# print()
