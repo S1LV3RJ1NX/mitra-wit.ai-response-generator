@@ -47,29 +47,35 @@ def out_of_scope(api_response=None):
 def helpline(api_response=None):
 
 	category = api_response['entities']
-	string = "These are the important helpline numbers:"
-
+	
+	string = ""
 	ct = 1
 	if bool(category):
 		enty = list(category.keys())[0].split(':')[0]
 		# print(enty)
 		if enty == 'ent_corona_india' or enty == 'ent_corona_MH':
+			string = "These are the important helpline numbers:"
 			for value in emergency["emergency"]:
 				if 'Corona' in value[0]:
 					string += "\n\t"+str(ct)+")Name: "+value[0].title()+"\n\t  Phone: "+str(value[1])
 					ct+=1
 
 		elif enty == 'ent_depression':
+			string += "Hey dear, please don't take any wrong step, there are many who care for you and love you :)"
+			string += "Talk to someone if no one is there to listen,\n"
+			string += "These are the important helpline numbers:"
 			for value in emergency["emergency"]:
 				if 'Depression' in value[0]:
 					string += "\n\t"+str(ct)+")Name: "+value[0].title()+"\n\t  Phone: "+str(value[1])
 					ct+=1
 		else:
+			string = "These are the important helpline numbers:"
 			for value in emergency["emergency"]:
 				string += "\n\t"+str(ct)+")Name: "+value[0].title()+"\n\t  Phone: "+str(value[1])
 				ct+=1
 
 	else:
+		string = "These are the important helpline numbers:"
 		for value in emergency["emergency"]:
 			string += "\n\t"+str(ct)+")Name: "+value[0].title()+"\n\t  Phone: "+str(value[1])
 			ct+=1
@@ -146,7 +152,7 @@ def get_food_shelter_location(api_response=None):
 	return string
 
 def yoga_recommend(api_response=None):
-	string = "Here are our soothing and relaxing exercis to freshen you: "
+	string = "Here are our soothing and relaxing exercises to freshen you: "
 	ct = 1 
 
 	for value in yoga["yoga"]:
@@ -298,7 +304,7 @@ def generate_response(message):
 
 if __name__ == '__main__':
 	
-	message = "Ngo in sungali"
+	message = "you were of great help... thanks"
 
 	response = generate_response(message)
 	# print()
