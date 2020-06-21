@@ -1,12 +1,18 @@
+# This file contains flask app which will act as interface between 
+# messenger app and response to user
+
+# Imports
 import os, sys
 from flask import Flask, request
 from pymessenger import Bot
 import config as cfg 
 from wit_response import generate_response
 
+# Register the app and messenger bot
 app = Flask(__name__)
 PAGE_ACCESS_TOKEN = cfg.fb["mitra_token"]
 bot = Bot(PAGE_ACCESS_TOKEN)
+
 
 @app.route('/', methods = ['GET'])
 def verify():
@@ -17,8 +23,12 @@ def verify():
 		return request.args["hub.challenge"], 200
 	return "Hello World", 200
 
+
 @app.route('/', methods = ['POST'])
 def webhook():
+	"""This function returns response to user based on his/her query.
+	"""
+
 	data = request.get_json()
 	log(data)
 	if data['object'] == 'page':
@@ -41,6 +51,8 @@ def webhook():
 	return "ok", 200
 
 def log(message):
+	"""Function to log message to server 
+	"""
 	print(message)
 	sys.stdout.flush()
 

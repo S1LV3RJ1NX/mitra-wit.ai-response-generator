@@ -1,9 +1,18 @@
+# This file is used to generate mappings for various excel files containg different entities.
+
+# Imports
 import config as cfg
 import os
 import pandas as pd
 from collections import defaultdict
 
+
 def read_excel_generate_mapping(fname, to_map=True,key=""):
+	"""This function is used to read the excel file and create a dictionary out of it.
+	If to_map is true it uses city as the key which is required by ambulance, hospitals,
+	ngo data. Else we use other keys such as yoga or music or helpline nos.
+	"""
+	
 	pre = os.path.dirname(os.path.realpath(__file__))
 	path = os.path.join(pre, fname)
 

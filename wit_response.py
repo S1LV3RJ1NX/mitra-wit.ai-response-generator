@@ -1,13 +1,18 @@
+# This file contains responses to be given when an intent is identifies by wit API
+
+# imports
 from wit import Wit
 import config as cfg
 import excel_parser as ep
 from covid_api import response_giver
 
-# WIT API
+
+# WIT API tokens
 access_token = cfg.wit_tokens["server_access_token"]
 client = Wit(access_token = access_token)
 
-# Dictionaries
+
+# Dictionaries which content mapping of various entities
 ngo = ep.read_excel_generate_mapping(cfg.excel_path["ngo"])
 food = ep.read_excel_generate_mapping(cfg.excel_path["food"])
 hospital = ep.read_excel_generate_mapping(cfg.excel_path["hospital"])
@@ -16,8 +21,11 @@ yoga = ep.read_excel_generate_mapping(cfg.excel_path["yoga"], to_map=False, key=
 music = ep.read_excel_generate_mapping(cfg.excel_path["music"], to_map=False, key="music")
 emergency = ep.read_excel_generate_mapping(cfg.excel_path["emergency"], to_map=False, key="emergency")
 
-# Intent greet
+
+# Intent: wit_greet 
 def greet(api_response=None):
+	"""This function is used when user greets the bot
+	"""
 
 	string = (
 		"Hii, I am 'Mitra' your guardian and helper during these tough times!! "
@@ -35,8 +43,13 @@ def greet(api_response=None):
 	)
 	return string
 
-# Intent out of scope
+
+# Intent: wit_out_of_scope
 def out_of_scope(api_response=None):
+	"""This function is used when user queries out of scope message.
+	or fogets to give city values for NGO/Shelter/Hospitals/Ambulance.
+	"""
+
 	string = (
 		"Sorry to say, we are unable to solve your query.\n"
 		"It might be the case, you might have missed out city names or miss-spelled them where required,"
@@ -46,8 +59,11 @@ def out_of_scope(api_response=None):
 	
 	return string
 
-# intent helpine
+
+# Intent: wit_helpine
 def helpline(api_response=None):
+	"""This function gives various emergency helplines.
+	"""
 
 	category = api_response['entities']
 	
@@ -86,7 +102,10 @@ def helpline(api_response=None):
 	return string
 	
 
+# Intent: wit_music
 def music_recommend(api_response=None):
+	"""This function returns pre-generated musical playlist
+	"""
 
 	string = "Here are our soothing and relaxing music recommendations: "
 	ct = 1 
@@ -96,7 +115,11 @@ def music_recommend(api_response=None):
 		ct+=1	
 	return string
 
+# Intent: wit_ngo
 def get_ngo_location(api_response=None):
+	"""This function returns ngo location for corresponding city.
+	"""
+
 	enty = api_response['entities']
 	string = ""
 
@@ -127,7 +150,11 @@ def get_ngo_location(api_response=None):
 
 	return string
 
+
+# Intent: wit_food_shelter
 def get_food_shelter_location(api_response=None):
+	"""This function returns food shelter location for corresponding city
+	"""
 	enty = api_response['entities']
 	string = ""
 
@@ -154,7 +181,11 @@ def get_food_shelter_location(api_response=None):
 
 	return string
 
+
+# Intent: yoga
 def yoga_recommend(api_response=None):
+	"""This function returns pre-generated youtube yoga playlist
+	"""
 	string = "Here are our soothing and relaxing exercises to freshen you: "
 	ct = 1 
 
@@ -163,7 +194,11 @@ def yoga_recommend(api_response=None):
 		ct+=1	
 	return string
 
+
+# Intent: wit_hospital
 def get_hospital_location(api_response=None):
+	"""This function returns hospital location for corresponding city.
+	"""
 	enty = api_response['entities']
 	string = ""
 
@@ -190,7 +225,11 @@ def get_hospital_location(api_response=None):
 
 	return string
 
+
+# Intent: wit_ambulance
 def get_ambulance_location(api_response):
+	"""This function returns ambulance location for corresponding city.
+	"""
 	enty = api_response['entities']
 	string = ""
 
@@ -218,10 +257,20 @@ def get_ambulance_location(api_response):
 
 	return string
 
+
+# Intent: wit_thanks
 def thanks(api_response=None):
+	"""This function returns thanking response.
+	"""
 	return "I am glad to be your 'Mitra'. Do remember me, in times of crisis..!!"
 
+
+# Intent: wit_ask_stats
 def get_statistics(api_response=None):
+	"""This function returns corona statistics for India and all states and 
+	also for corresponding cities of Maharashtra.
+	"""
+
 	entities_state = None
 	entities_city = None
 
@@ -234,7 +283,12 @@ def get_statistics(api_response=None):
 	string = response_giver(entities_city, entities_state)
 	return string
 
+
+# Intent: wit_corona_precautions
 def corona_precaution(api_response=None):
+	"""This function returns precautions for corona for corona precaution intent.
+	"""
+
 	string = (
 		"To prevent the spread of COVID-19:"
 		"\n 1)Clean your hands often. Use soap and water, or an alcohol-based hand rub."
@@ -247,7 +301,12 @@ def corona_precaution(api_response=None):
 	)
 	return string
 
+
+# Intent: wit_corona_symptoms
 def corona_symptoms(api_response):
+	"""This function returns symptoms for corona for corona symptoms intent.
+	"""
+
 	string = (
 		"Most common symptoms:"
 		"\n\t -fever"
@@ -272,7 +331,13 @@ def corona_symptoms(api_response):
 	)
 	return string
 
+
+# Selecting corresponding function for the corresponding intent
 def intents_to_functions(intent): 
+	"""This function acts like switch case simulation. It selects the function to be 
+	executed based on the intent identified.
+	"""
+
 	# print("Intent:",intent)
 	return { 
 		'wit_greet': greet,
@@ -291,7 +356,11 @@ def intents_to_functions(intent):
 	}.get(intent, "Invalid query, please reformat the query and try again!!")
 
 
+# Function to give response to user for corresponding intent
 def generate_response(message):
+	"""This function returns the final response to the user according to the intent generated.
+	"""
+
 	api_response = client.message(message)
 	response = None
 	# print(api_response)
@@ -304,6 +373,7 @@ def generate_response(message):
 		response = "Invalid query please ask again!!"
 
 	return response
+
 
 if __name__ == '__main__':
 	
