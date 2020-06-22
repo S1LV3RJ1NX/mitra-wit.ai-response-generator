@@ -377,7 +377,7 @@ def generate_response(message):
 
 if __name__ == '__main__':
 	
-	message = "food shelters in Sangli"
+	message = "ngo in Pune"
 
 	response = generate_response(message)
 	# print()
