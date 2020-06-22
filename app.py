@@ -45,7 +45,7 @@ def webhook():
 						messaging_text = 'no text received'
 
 					response = messaging_text
-					# print(response)
+					print(response)
 					bot.send_text_message(sender_id, response)
 
 	return "ok", 200
