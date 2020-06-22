@@ -139,8 +139,7 @@ def get_ngo_location(api_response=None):
 				# print(type(value[0]), type(value[1]), type(value[2]), type(value[3]), type(value[5]) )
 
 				string += "\n\t"+str(ct)+")Name: "+str(value[0]).strip().title()+"\n\t  Phone: "+str(value[1]).strip()+ \
-							"\n\t  Email: "+str(value[2]).strip()+"\n\t  Addr: "+str(value[3]).strip().title()+ \
-							"\n\t  Type: "+str(value[5]).title()
+							"\n\t  Addr: "+str(value[2]).strip()+"\n\t  Type: "+str(value[4]).strip().title()
 				ct+=1
 		else:
 			string += out_of_scope()
