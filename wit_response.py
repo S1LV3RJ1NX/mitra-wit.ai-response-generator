@@ -213,8 +213,8 @@ def get_hospital_location(api_response=None):
 			string += "Here are your required hospitals in the city "+city+": "
 			# print(ngo[city.lower()])
 			for value in hospital[city.lower()]:
-				# print(type(value[0]), type(value[1]), type(value[2]), type(value[3]), type(value[5]) )
-				string += "\n\t"+str(ct)+")Name: "+str(value[0]).strip().title()+"\n\t  Phone: "+str(value[1]).strip()
+				# print(type(value[0]), type(value[1]), type(value[2]), type(value[3]), type(value[5]) ambulance
+				string += "\n\t"+str(ct)+")Name: "+str(value[1]).strip().title()+"\n\t  Phone: "+str(value[2]).strip()
 				ct+=1
 		else:
 			string += out_of_scope()
@@ -376,7 +376,7 @@ def generate_response(message):
 
 if __name__ == '__main__':
 	
-	message = "ngo in Pune"
+	message = "ambulance in Sangli"
 
 	response = generate_response(message)
 	# print()
